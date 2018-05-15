@@ -1,0 +1,51 @@
+\input expl3-generic
+\everyeof{\noexpand}
+\batchmode
+
+\ExplSyntaxOn
+\let\fpeval\fp_eval:n
+\ExplSyntaxOff
+
+\def\luaeval#1{\input|"texlua rtexlua.lua  'print(#1)'" }
+
+\pdfresettimer
+
+\immediate\write5{expl3}
+
+\message{\fpeval{sqrt(2)}}
+
+\count0=0
+
+\loop
+\ifnum\count0<1000
+\advance\count0 by 1
+\edef\z{\fpeval{sqrt(\the\count0) + cos(10) *sin(10)}}
+\repeat
+
+\message{\z}
+
+\message{\the\pdfelapsedtime}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\immediate\write5{lua}
+
+\pdfresettimer
+\message{\luaeval{math.sqrt(2)}}
+
+
+\count0=0
+
+\loop
+\ifnum\count0<1000
+\advance\count0 by 1
+\edef\z{\luaeval{math.sqrt(\the\count0) + math.cos(10) * math.sin(10)}}
+\repeat
+
+\message{\z}
+
+\message{\the\pdfelapsedtime}
+
+
+
+\bye
